@@ -4,39 +4,23 @@ header("Content-Type:text/html; charset=big5");
 // CROS
 header("Access-Control-Allow-Origin: *");
  
-
 $name = $_GET["name"];
+$date = isset($_GET["date"])?$_GET["date"]:"";
 $type = isset($_GET["type"])?$_GET["type"]:"";
 $hours = $_GET["hours"];
 $note = isset($_GET["note"])?$_GET["note"]:"";
+$id = isset($_GET["id"])?$_GET["id"]:"";
 
-
-$fields = "";
 
 $db = new PDO("odbc:salary");  
-$sql = "insert into 請假紀錄  (姓名,假別,時數,說明,日期) values ('$name','$type','$hours','$note','2022-01-01')";
+$sql = "update 請假紀錄 set 姓名='$name',假別='$type',日期='$date',時數='$hours',說明='$note' where id = $id" ;
 $sql = mb_convert_encoding($sql, "BIG5", "UTF-8");  
+echo $sql;
 
-// echo $sql;
-// return; 
-
-
-try {
-
+try {    
     $statement = $db->prepare($sql);
-
-$statement->execute();
-
-
-    // $rs = $db->query($sql);
+    $statement->execute();    
 } catch (PDOException $err) {
     print_r($err->getMessage());
 }
-
-
-$sql = "select top 1 id from 請假紀錄 order by id desc";
-$sql = mb_convert_encoding($sql, "BIG5", "UTF-8"); 
-$rs = $db->query($sql); 
-echo $rs->fetch()[0];
-
 ?>
